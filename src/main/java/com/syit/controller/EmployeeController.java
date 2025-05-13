@@ -107,12 +107,12 @@ public class EmployeeController {
 	  
 	 
 
-	@GetMapping("/employeeProfile")
+	@GetMapping("/userProfile")
 	public String userProfile(Principal principal) {
 		
 		if(principal != null) {
 			System.out.println("Logged In User Is: "+ principal.getName());
-			return "employeeProfile";
+			return "userProfile";
 		}
 		return "redirect:NotFound";
 	}

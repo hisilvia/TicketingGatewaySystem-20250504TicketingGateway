@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
+	
 
 	@GetMapping(value="/home")
 	public String homePage(Model model, Principal principal) {
-		model.addAttribute("message1", "empName");
+		model.addAttribute("message1", "UserName");
 		model.addAttribute("message2", principal.getName());
 			
 		return "home";  // refers to home.jsp
@@ -24,4 +25,6 @@ public class HomeController {
 			
 		return "system";  // refers to system.jsp
 	}
+	
+
 }
