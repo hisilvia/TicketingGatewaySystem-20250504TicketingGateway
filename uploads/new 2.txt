@@ -1,0 +1,36 @@
+package com.syit.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.syit.component.HotelClient;
+
+@RestController
+public class GatewayController {
+
+	@Autowired
+	HotelClient hotelClient;
+	
+	//public static List<JsonNode> hotel = new ArrayList<>();
+	
+	@RequestMapping(value="/addHotel", method=RequestMethod.POST)
+	//public List<JsonNode> addHotel(@RequestBody JsonNode node) {
+	public JsonNode addHotel(@RequestBody JsonNode node) {
+		//hotel.add(node);
+		System.out.println("GatewayController-node: " + node);
+		System.out.println("GatewayController-name: " + node.get("name"));
+		
+		//return hotel;
+		//return node;
+		return hotelClient.hotelPostClient(node);
+	}
+	
+	
+}

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.syit.domain.Employee;
 
@@ -18,7 +19,7 @@ import jakarta.persistence.Table;
 
 public class Ticket {
 	
-	//private long id;
+	private long id;
 	private String title;
 	private String description;
 	
@@ -34,6 +35,9 @@ public class Ticket {
 	private Date creationDate;
 	private String category;
 	private List<String> fileAttachementPath;
+	//private MultipartFile fileAttachementPath;
+	
+	//private byte[] fileType;
 	
 	@OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
 	private List<TicketHistory> history;
@@ -59,7 +63,7 @@ public class Ticket {
 		this.fileAttachementPath = fileAttachementPath;
 		this.history = history;
 	}
-
+    */
 	public long getId() {
 		return id;
 	}
@@ -67,7 +71,7 @@ public class Ticket {
 	public void setId(long id) {
 		this.id = id;
 	}
-    */
+    
 	public String getTitle() {
 		return title;
 	}

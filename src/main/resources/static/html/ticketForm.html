@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ticket Form</title>
+<style>
+	.success {
+		display: none;
+		background: #E1F8ED;
+		padding:20px;
+		margin-top: 16px;
+		margin-bottom: 16px;
+		
+	}
+	
+	.success.is-active{
+		display:block;
+	}
+</style>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+                integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+                crossorigin="anonymous">
+</script>
+<script>
+	$(document).ready(function(){
+		
+		$("#ticketForm").on("submit", function(e){
+			e.preventDefault();
+			
+			//Create a FormData object
+			var formData = new FormData();
+
+			// Add the file
+			var fileInput = document.getElementById('fileInputId');
+			for(let i=0; i<fileInput.files.length; i++){
+			//if (fileInput.files.length > 0) {
+			    formData.append('files', fileInput.files[i]);
+			};
+			
+			
+			
+
+			//Prepare JSON data for other form fields
+			var jsonData = {
+				"title": $('#title').val(),
+			    "description": $('#description').val(),
+				"createdBy": $('#createdBy').val(),
+			    "assignee": $('#assignee').val(),
+			    "priority": $('#priority').val(),
+			    "status": $('#status').val(),
+				"creationDate": new Date($('#creationDate').val()) ,
+				"category": $('#category').val()
+				
+			};
+
+			formData.append('ticketData', JSON.stringify(jsonData));
+
+			$.ajax({
+				url: "/api/addTicket",
+				type: "POST",
+				data: formData,
+				enctype: 'multipart/form-data',
+				contentType: false,   //Prevent jQuery from setting content type
+				processData: false,   //Don't process the data (because its's a file')
+				success:function(response){
+					//The function to be called if the request succeeds
+					alert('Ticket submitted successfully!');	
+				},				
+				error: function(xhr, status, error){
+					alert('Error: ' + error);
+				}
+			});
+								
+		});
+			
+							
+	});
+	
+</script>
+
+</head>
+
+<body>
+	<div class="col-md-6 offset-md-3 mt-5">
+	<h2>Create a New Ticket</h2>
+	<!-- enctype="multipart/form-data" to handle file uploads correctly  -->
+	<form id="ticketForm" method="post" action="/api/addTicket" enctype="multipart/form-data" >
+		
+		<div class="form-group">
+			<label for="title">Title:</label>
+			<input type="text" id="title" name="title" class="form-control"/>  <br/><br/>
+		</div>
+		
+		<div class="form-group">
+		<label for="description">Description:</label>
+		<textarea id="description" name="description" class="form-control"></textarea> <br/><br/>
+		</div>
+		
+		<div class="form-group">
+		<label for="createdBy">CreatedBy:</label>
+		<input type="text" id="createdBy" name="createdBy" class="form-control"/> <br/><br/>
+		</div>
+		
+		<div class="form-group">
+		<label for="assignee">Assignee:</label>
+		<input type="text" id="assignee" name="assignee" class="form-control"/> <br/><br/>
+		</div>
+		
+		<div class="form-group">
+		<label for="priority">Priority:</label>
+        <select id="priority" name="priority" class="form-control">
+            <option value="LOW">LOW</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="HIGH">HIGH</option>
+		</select>	
+		<br/><br/>
+		</div>
+		
+		<div class="form-group">
+		<label for="status">Status:</label>
+        <select id="status" name="status" class="form-control">
+            <option value="OPEN">OPEN</option>
+            <option value="PENDING_APPROVAL">PENDING_APPROVAL</option>
+            <option value="APPROVED">APPROVED</option>
+			<option value="REJECTED">REJECTED</option>
+			<option value="ASSIGNED">ASSIGNED</option>
+			<option value="RESOLVED">RESOLVED</option>
+			<option value="CLOSED">CLOSED</option>
+			<option value="REOPENED">REOPENED</option>							
+		</select>
+		<br/><br/>
+		</div>
+		
+		<div class="form-group">
+		<label for="category">Category:</label>
+		<select id="category" name="category" class="form-control">
+			<option value="IMPROVEMENT">IMPROVEMENT</option>
+			<option value="DOCUMENTATION">DOCUMENTATION</option>
+			<option value="MAINTENANCE">MAINTENANCE</option>
+			<option value="IT">IT</option>
+			<option value="FINANCE">FINANCE</option>			
+        </select>
+		<br/><br/>
+		</div>
+				
+		<div class="form-group">
+		<label for="creationDate">CreationDate:</label>
+		<input type="date" id="creationDate" name="creationDate" class="form-control"/>
+		<br/><br/>
+		</div>
+		
+		
+		<hr/>
+		
+		<div class="form-group mt-3">
+		<label class= "mr-2" for="file">FileAttachmentPath</label>
+		<input type="file" id="fileInputId" name="file[]" multiple/>  
+		<br/><br/>
+		</div>
+		
+		<div class="form-group">
+		<input type="submit" value="Submit"/><br/><br/>
+		</div>
+	</form>	
+	<a href="/home">Back To Home</a>	
+	</div>  
+</body>
+</html>

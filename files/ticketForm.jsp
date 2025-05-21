@@ -54,7 +54,7 @@
 			<br/><br/>
 			
 			<form:label path="fileAttachementPath">FileAttachmentPath</form:label>
-			<form:input type="file" path="fileAttachementPath"/>  
+			<form:input type="file" path="fileAttachementPath" name="file" />  
 			<br/><br/>
 			
 			<input type='submit' id='add' value='Submit'/>

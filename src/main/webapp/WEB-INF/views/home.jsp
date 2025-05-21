@@ -64,13 +64,6 @@
 	       </div>
 	     </li>
 	   </ul>
-	   <!--
-		<form:form action="${pageContext.request.contextPath}/logout" method="post">
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		<button class="btn btn-outline-success" type="submit">Logout</button>
-
-		</form:form>
-	   -->
 	 </nav>	
 		
 		
@@ -93,13 +86,19 @@
 			          Welcome
 			          <span id="username">
 			            <security:authentication property="principal.username" /><br/><br/>
-						<button type="button" class="btn btn-primary">USER</button><br/><br/>
+						<form action="/user" method="GET">
+							<button type="submit" class="btn btn-primary">USER</button><br/><br/>
+						</form>
 			          </span>
 					  <security:authorize access="hasAuthority('MANAGER')">
-  			            <button type="button" class="btn btn-info">MANAGER</button>
+						<form action="/manager" method="GET">
+  			            	<button type="submit" class="btn btn-info">MANAGER</button><br/><br/>
+						</form>
   			          </security:authorize>
 			          <security:authorize access="hasAuthority('ADMIN')">
-			            <button type="button" class="btn btn-info">ADMIN</button>
+						<form action="/admin" method="GET">
+			            	<button type="submit" class="btn btn-info">ADMIN</button><br/><br/>
+						</form>
 			          </security:authorize>
 		        </security:authorize>
 				<br/><br/>

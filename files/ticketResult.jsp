@@ -6,7 +6,7 @@
         <link href="<c:url value="/css/common.css"/>" rel="stylesheet" type="text/css">
     </head>
     <body>
-        <table>
+        <table board="1">
             <thead>
                 <tr>
 					<th>ID</th>
@@ -18,7 +18,7 @@
 					<th>Status</th>	
 					<th>CreationDate</th>
 					<th>Category</th>
-					<th>fileAttachmentPath</th>	
+					<th>fileAttachment</th>	
 													
                 </tr>
             </thead>
@@ -28,13 +28,13 @@
 						<td>${ticket.id}</td>
                         <td>${ticket.title}</td>
                         <td>${ticket.description}</td>
-                        <td>${ticket.createBy}</td>
+                        <td>${ticket.createdBy}</td>
 						<td>${ticket.assignee}</td>
 						<td>${ticket.priority}</td>
 						<td>${ticket.status}</td>
 						<td>${ticket.creationDate}</td>
 						<td>${ticket.category}</td>
-						<td>${ticket.fileAttachmentPath}</td>												
+					<	<td>${uploadedFileName}</td>										
                     </tr>
                 
             </tbody>

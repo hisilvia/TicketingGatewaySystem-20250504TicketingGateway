@@ -18,13 +18,31 @@ public class HomeController {
 		return "home";  // refers to home.jsp
 	}
 	
-	@GetMapping(value="/system")
+	@GetMapping(value="/user")
+	public String userPage(Model model, Principal principal) {
+		model.addAttribute("message1", "empName");
+		model.addAttribute("message2", principal.getName());
+			
+		return "userDashboard";  
+	}
+	
+	@GetMapping(value="/manager")
+	public String managerPage(Model model, Principal principal) {
+		model.addAttribute("message1", "empName");
+		model.addAttribute("message2", principal.getName());
+			
+		return "managerDashboard";  
+	}
+	
+	@GetMapping(value="/admin")
 	public String adminPage(Model model, Principal principal) {
 		model.addAttribute("message1", "empName");
 		model.addAttribute("message2", principal.getName());
 			
-		return "system";  // refers to system.jsp
+		return "adminDashboard";  
 	}
+	
+	
 	
 
 }
