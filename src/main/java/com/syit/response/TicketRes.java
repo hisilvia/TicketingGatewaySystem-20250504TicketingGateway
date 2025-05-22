@@ -1,23 +1,11 @@
-package com.syit.model;
+package com.syit.response;
 
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.syit.domain.Employee;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 
-public class Ticket {
+public class TicketRes {
 	
 	private long id;
 	private String title;
@@ -31,36 +19,16 @@ public class Ticket {
 	private String priority;     // LOW, MEDIUM, HIGH
 	private String status;       //OPEN, PENDING_APPROVAL, APPROVED, REJECTED, 
 	
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	
 	private Date creationDate;
 	private String category;
 	private List<String> fileAttachementPath;
 	
-	@OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
-	private List<TicketHistory> history;
 	
-	/*
-	public Ticket() {
-		super();
-	}
-
-	public Ticket(long id, String title, String description, String createdBy, String assignee, String priority,
-			String status, Date creationDate, String category, String fileAttachementPath,
-			List<TicketHistory> history) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.createdBy = createdBy;
-		this.assignee = assignee;
-		this.priority = priority;
-		this.status = status;
-		this.creationDate = creationDate;
-		this.category = category;
-		this.fileAttachementPath = fileAttachementPath;
-		this.history = history;
-	}
-    */
+	
+	private List<TicketHistoryRes> history;
+	
+	
 	public long getId() {
 		return id;
 	}
@@ -141,11 +109,11 @@ public class Ticket {
 		this.fileAttachementPath = fileAttachementPath;
 	}
 
-	public List<TicketHistory> getHistory() {
+	public List<TicketHistoryRes> getHistory() {
 		return history;
 	}
 
-	public void setHistory(List<TicketHistory> history) {
+	public void setHistory(List<TicketHistoryRes> history) {
 		this.history = history;
 	}
 

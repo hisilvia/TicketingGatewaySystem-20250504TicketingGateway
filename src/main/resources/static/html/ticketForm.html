@@ -45,11 +45,13 @@
 			var jsonData = {
 				"title": $('#title').val(),
 			    "description": $('#description').val(),
+				/*
 				"createdBy": $('#createdBy').val(),
 			    "assignee": $('#assignee').val(),
-			    "priority": $('#priority').val(),
-			    "status": $('#status').val(),
+				"status": $('#status').val(),
 				"creationDate": new Date($('#creationDate').val()) ,
+				*/
+			    "priority": $('#priority').val(),  	
 				"category": $('#category').val()
 				
 			};
@@ -57,7 +59,7 @@
 			formData.append('ticketData', JSON.stringify(jsonData));
 
 			$.ajax({
-				url: "/api/addTicket",
+				url: "/user/addTicket",
 				type: "POST",
 				data: formData,
 				enctype: 'multipart/form-data',
@@ -96,7 +98,7 @@
 		<label for="description">Description:</label>
 		<textarea id="description" name="description" class="form-control"></textarea> <br/><br/>
 		</div>
-		
+		<!--
 		<div class="form-group">
 		<label for="createdBy">CreatedBy:</label>
 		<input type="text" id="createdBy" name="createdBy" class="form-control"/> <br/><br/>
@@ -105,16 +107,6 @@
 		<div class="form-group">
 		<label for="assignee">Assignee:</label>
 		<input type="text" id="assignee" name="assignee" class="form-control"/> <br/><br/>
-		</div>
-		
-		<div class="form-group">
-		<label for="priority">Priority:</label>
-        <select id="priority" name="priority" class="form-control">
-            <option value="LOW">LOW</option>
-            <option value="MEDIUM">MEDIUM</option>
-            <option value="HIGH">HIGH</option>
-		</select>	
-		<br/><br/>
 		</div>
 		
 		<div class="form-group">
@@ -133,6 +125,23 @@
 		</div>
 		
 		<div class="form-group">
+		<label for="creationDate">CreationDate:</label>
+		<input type="date" id="creationDate" name="creationDate" class="form-control"/>
+		<br/><br/>
+		</div>
+		
+		-->
+		<div class="form-group">
+		<label for="priority">Priority:</label>
+        <select id="priority" name="priority" class="form-control">
+            <option value="LOW">LOW</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="HIGH">HIGH</option>
+		</select>	
+		<br/><br/>
+		</div>
+				
+		<div class="form-group">
 		<label for="category">Category:</label>
 		<select id="category" name="category" class="form-control">
 			<option value="IMPROVEMENT">IMPROVEMENT</option>
@@ -143,14 +152,7 @@
         </select>
 		<br/><br/>
 		</div>
-				
-		<div class="form-group">
-		<label for="creationDate">CreationDate:</label>
-		<input type="date" id="creationDate" name="creationDate" class="form-control"/>
-		<br/><br/>
-		</div>
-		
-		
+						
 		<hr/>
 		
 		<div class="form-group mt-3">

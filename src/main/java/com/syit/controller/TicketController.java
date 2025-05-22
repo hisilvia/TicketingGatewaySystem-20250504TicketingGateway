@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -31,10 +34,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syit.component.TicketClient;
+import com.syit.model.Ticket;
+
 
 
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class TicketController {
 	
 	private static final String ticketPostUrl = "http://localhost:8383/ticket/ticketPost";
@@ -49,11 +54,17 @@ public class TicketController {
 	@Autowired
 	ObjectMapper objectMapper;
 	
-	@PostMapping(value="/addTicket")
+	
+	
+	
+	
+	@PostMapping(value="/user/addTicket")
 	public ResponseEntity<String> uploadTicket(
             @RequestParam("files") MultipartFile[] files,
             @RequestParam("ticketData") String ticketDataJson) {  //"ticketData" comes from jQuery
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("userName: "+authentication.getName()); //eg.susan
 		JsonNode ticketData;
 		
         try {
@@ -63,42 +74,37 @@ public class TicketController {
             // Access fields in JsonNode
             String title = ticketData.get("title").asText();
             String description = ticketData.get("description").asText();
-            String createdBy = ticketData.get("createdBy").asText();
-            String assignee = ticketData.get("assignee").asText();
             String priority = ticketData.get("priority").asText();
-            String status = ticketData.get("status").asText();
             String category = ticketData.get("category").asText();
-            String date = ticketData.get("creationDate").asText();
+            //String date = ticketData.get("creationDate").asText();
+          
             
 
             // Log the data
             System.out.println("Title: " + title);
             System.out.println("Description: " + description);
-            System.out.println("CreatedBy: " + createdBy);
-            System.out.println("Assignee: " + assignee);
             System.out.println("Priority: " + priority);
-            System.out.println("Status: " + status);
             System.out.println("Category: " + category);
-            System.out.println("CreationDate: " + date);
+            //System.out.println("CreationDate: " + date);
+           
+            Ticket ticket = new Ticket();
+            ticket.setTitle(title);
+            ticket.setDescription(description);
+            ticket.setPriority(priority);
+            ticket.setCategory(category);
+            //ticket.setCreationDate(new Date(date));
+            ticket.setCreatedBy(authentication.getName());
+            ticket.setStatus("OPEN");
+            ticket.setAssignee(null);
             
-            /*
-            //Prepare the request body for the second API
-            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-            body.add("title", title);
-            body.add("description", description);
-            body.add("createdBy", createdBy);
-            body.add("assignee", assignee);
-            body.add("priority", priority);
-            body.add("status", status);
-            //body.add("category", category);            
-            */
+            List<String> attachFileName = new ArrayList<>();
             List<String> fileNameStr = new ArrayList<>();
             
             // Handle file upload (optional save)
             for(MultipartFile file : files) {
 	            if (!file.isEmpty()) {
 	            	String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-	            	//fileNameStr.add(fileName);
+	            	attachFileName.add(fileName);
 	            	
 	                //String fileName = file.getOriginalFilename();
 	                System.out.println("File uploaded: " + fileName);
@@ -108,26 +114,16 @@ public class TicketController {
 	                Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 	                //file.transferTo(new java.io.File("uploads\\" + fileName));
 	            }
-            }       
-            //body.add("fileAttachementPath", fileNameStr);
-            /*
-            //Set the headers
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            
-            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-            */
-            //Use RestTemplate to forward the request
-            RestTemplate restTemplate = new RestTemplate();
-            //ResponseEntity<String> response = restTemplate.postForEntity(ticketPostUrl, requestEntity, String.class);
-            ResponseEntity<String> response = restTemplate.postForEntity(ticketPostUrl, ticketData, String.class);
-            
-            return ResponseEntity.ok("Ticket uploaded successfully!"+response.getBody());
-            //return "Ticket uploaded successfully!"+response.getBody();
+            }
+            ticket.setFileAttachementPath(attachFileName);
+           
+            ResponseEntity<String> response = TicketClient.ticketPostClient(ticket);
+           return ResponseEntity.ok("Ticket uploaded successfully!"+response.getBody());
+  
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error processing ticket");
-            //return "Error processing ticket";
+            
         }
     }
 	
