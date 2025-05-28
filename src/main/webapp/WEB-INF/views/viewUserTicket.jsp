@@ -11,11 +11,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
 <meta charset="UTF-8">
-<title>ADMIN page</title>
+		
+<title>View Ticket</title>
 </head>
 	<body>
 		<nav class="navbar navbar-dark bg-primary justify-content-between">
-			   <a class="navbar-brand" href="/">ADMIN</a>
+			   <a class="navbar-brand" href="/">Home</a>
 			   <ul class="navbar-nav">
 			     <li class="nav-item dropdown">
 			       <a
@@ -35,7 +36,7 @@
 			         </security:authorize>
 			       </a>
 			       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-			         <a class="dropdown-item" href="/admin">Admin</a>
+			         <a class="dropdown-item" href="/user">User</a>
 			         <a class="dropdown-item" href="/login?logout">Logout</a>
 			       </div>
 			     </li>
@@ -43,20 +44,35 @@
 			 </nav>	
 			 <div class="d-grid gap-2 col-6 mx-auto">
 				<div class="text-center">
+					<br/><br/>
+					<h2>User View Your Tickets</h2>
+					<table border="1" width="100%" cellpadding="8">
+					    <thead>
+					        <tr>
+					            <th>ID</th>
+					            <th>Title</th>
+					            <th>Priority</th>
+					            <th>Status</th>								
+					            <th>Assignee</th>
+					            
+					        </tr>
+					    </thead>
+						<tbody>
+							<c:forEach var="ticket" items="${ticketList}" >
+								<tr>
+									<td>${ticket.id}</td>
+									<td>${ticket.title}</td>
+									<td>${ticket.priority}</td>
+									<td>${ticket.status}</td>
+									<td><c:out value="${ticket.assignee}" default="Not Yet" /></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+						
 					<br/>
-					<h2>Hey ${message2}, welcome to ADMIN page!</h2>
-					
-					<div>
-						<form action="http://localhost:8282/allTicketsView" method="GET">
-  			            	<button type="submit" class="btn btn-info">View Tickets</button><br/><br/>
-						</form>
-					
-						<form action="#" method="GET">
-  			            	<button type="submit" class="btn btn-info">View Status</button><br/><br/>
-						</form>
-					</div>		
-					<br/>
-					<a href="/">Back To Home</a>
+					<a href="/home">Back To Home</a>
 				</div>	
 			 </div>	
 		

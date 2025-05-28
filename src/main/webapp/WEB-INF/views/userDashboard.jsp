@@ -50,13 +50,13 @@
   			            	<button type="submit" class="btn btn-info">Create Ticket</button><br/><br/>
 						</form>
 					
-						<form action="#" method="GET">
+						<form action="http://localhost:8282/user/viewUserTicket" method="GET">
   			            	<button type="submit" class="btn btn-info">View Tickets</button><br/><br/>
 						</form>
 					</div>
 					
 					<br/>
-					<a href="/home">Back To Home</a>
+					<a href="/">Back To Home</a>
 				</div>	
 			 </div>	
 		

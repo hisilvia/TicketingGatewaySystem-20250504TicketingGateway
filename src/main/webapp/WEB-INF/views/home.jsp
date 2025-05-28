@@ -86,26 +86,31 @@
 			          Welcome
 			          <span id="username">
 			            <security:authentication property="principal.username" /><br/><br/>
-						<form action="/user" method="GET">
+					  </span>
+						<security:authorize access="hasAuthority('USER')">
+						 <form action="user" method="GET">
 							<button type="submit" class="btn btn-primary">USER</button><br/><br/>
-						</form>
-			          </span>
+						 </form>
+						</security:authorize>
+			          
 					  <security:authorize access="hasAuthority('MANAGER')">
-						<form action="/manager" method="GET">
+						<form action="manager" method="GET">
   			            	<button type="submit" class="btn btn-info">MANAGER</button><br/><br/>
 						</form>
   			          </security:authorize>
 			          <security:authorize access="hasAuthority('ADMIN')">
-						<form action="/admin" method="GET">
+						<form action="admin" method="GET">
 			            	<button type="submit" class="btn btn-info">ADMIN</button><br/><br/>
 						</form>
 			          </security:authorize>
 		        </security:authorize>
 				<br/><br/>
+				<!--
 				<form:form action="${pageContext.request.contextPath}/logout" method="post">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<input type="submit" value="Logout">	
-				</form:form>	
+				</form:form>
+				-->	
 			</div>
 	   </div>
 	   

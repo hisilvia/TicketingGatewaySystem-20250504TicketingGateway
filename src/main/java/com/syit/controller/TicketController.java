@@ -5,13 +5,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -23,7 +26,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,13 +41,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syit.component.TicketClient;
 import com.syit.model.Ticket;
 
+import jakarta.servlet.http.HttpSession;
+
 
 
 @RestController
 //@RequestMapping("/api")
 public class TicketController {
 	
-	private static final String ticketPostUrl = "http://localhost:8383/ticket/ticketPost";
 	private final Path fileStorageLocation;
 
     @Autowired
@@ -54,17 +60,17 @@ public class TicketController {
 	@Autowired
 	ObjectMapper objectMapper;
 	
+	@Autowired
+	TicketClient ticketClient;
 	
-	
-	
-	
-	@PostMapping(value="/user/addTicket")
+	@PostMapping(value="/addTicket")
 	public ResponseEntity<String> uploadTicket(
             @RequestParam("files") MultipartFile[] files,
             @RequestParam("ticketData") String ticketDataJson) {  //"ticketData" comes from jQuery
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		System.out.println("userName: "+authentication.getName()); //eg.susan
+		
 		JsonNode ticketData;
 		
         try {
@@ -77,8 +83,6 @@ public class TicketController {
             String priority = ticketData.get("priority").asText();
             String category = ticketData.get("category").asText();
             //String date = ticketData.get("creationDate").asText();
-          
-            
 
             // Log the data
             System.out.println("Title: " + title);
@@ -117,7 +121,7 @@ public class TicketController {
             }
             ticket.setFileAttachementPath(attachFileName);
            
-            ResponseEntity<String> response = TicketClient.ticketPostClient(ticket);
+            ResponseEntity<String> response = ticketClient.ticketPostClient(ticket);
            return ResponseEntity.ok("Ticket uploaded successfully!"+response.getBody());
   
         } catch (Exception e) {
@@ -127,76 +131,75 @@ public class TicketController {
         }
     }
 	
-	
-	
-	
+	@GetMapping("/user/viewTicket/{name}")
+	public List<Ticket> getTicketsFromMicroservice(@PathVariable String name){		
+		return ticketClient.ticketGetClient(name);
+	}
+
+	@GetMapping("/viewAllTickets")
+	public ResponseEntity<String> allTickets(){
+		return ticketClient.ticketGetAllClient();
+	}
 	/*
-	@Autowired
-	TicketClient ticketClient;
+	@PutMapping("/manager/approve")
+	public void updateStatusApp(@RequestBody Ticket ticket) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("userName: "+authentication.getName()); //eg.susan
+		ticket.setAssignee(authentication.getName());
+		//
+		ticket.setStatus("APPROVED");
+		ticketClient.updateStatus(ticket);
+	} 
+	
+	@PostMapping("/manager/approve")
+	public ResponseEntity<String> updateStatusApp(@RequestBody Ticket ticket) {
+		
+		ticket.setStatus("APPROVED");
+		return ticketClient.updateStatus(ticket);
+	} 
 	
 	
-	@PostMapping(value="/addTicket")
-	public JsonNode addTicket(@RequestBody JsonNode node) {
-		System.out.println("TicketingGateway-controller-title: "+node.get("title"));
-		return ticketClient.ticketPostClient(node);
+	@PutMapping("/manager/reject")
+	public void updateStatusRej(@RequestBody Ticket ticket, Principal principal) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("userName: "+authentication.getName()); //eg.susan
+		ticket.setAssignee(authentication.getName());
+		ticket.setStatus("REJECTED");
+		ticketClient.updateStatus(ticket);
+	}
+	
+	@PutMapping("/admin/resolve")
+	public void updateStatusRes(@RequestBody Ticket ticket, Principal principal) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("userName: "+authentication.getName()); //eg.susan
+		ticket.setAssignee(authentication.getName());
+		ticket.setStatus("RESOLVED");
+		ticketClient.updateStatus(ticket);
 	}
 	*/
-	/*
-	@GetMapping(value="/getTicketFromMicroservice")
-	public String ticketGetClient(String data) {
-		
-		RestTemplate restTemplate= new RestTemplate();
-		ResponseEntity<String> responseEntity = restTemplate.getForEntity(ticketGetUrl+data, String.class);
-		String response = responseEntity.getBody();
-	
-		return response;
-	}	
-	 */
 }
 /*
 modelAttribute: Binds the form to your model class (ticket).
 method="post": Specifies the HTTP method for form submission.
 enctype="multipart/form-data": Crucial for handling file uploads.
-path="fileAttachementPathh": Binds the file input to the fileAttachementPath field in your model.
-  
-  
-  
+path="fileAttachementPathh": Binds the file input to the fileAttachementPath field in your model. 
 */
-/*
-public String submitTicketForm(@ModelAttribute("ticket") Ticket ticket, 
-		@RequestParam("file") MultipartFile file, Model model) throws IOException {
-
-	String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-    Path targetLocation = this.fileStorageLocation.resolve(fileName);
-    Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
-    model.addAttribute("message", "Uploaded successfully: " + fileName);
-    System.out.println("fileName: "+fileName);
-    
-	try {
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode ticketJsonNode = objectMapper.valueToTree(ticket);
-		
-		HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<JsonNode> requestEntity = new HttpEntity<>(ticketJsonNode, headers);
-
-        JsonNode response = restTemplate.postForObject(ticketPostUrl, requestEntity, JsonNode.class);
-
-        if (response != null) {
-            System.out.println("Response from /ticketGateway/addTicket: " + response);
-        }
-
-        model.addAttribute("message", "Ticket submitted successfully!");			
-		
-	}catch(Exception e) {
-		model.addAttribute("message", "Failed to submit ticket: " + e.getMessage());
-		
-		e.printStackTrace();
-	}		
-	//return "ticketForm";
-	return "ticketResult";  // refers to ticketResult.jsp
+/* This method is definitely fine, runs well! However, I wanna divided it in two part
+private static final String ticketGetUrl = "http://localhost:8383/ticket/ticketGetByName/";
+@GetMapping("/user/viewTicket/{name}")
+public List<Ticket> getTicketsFromMicroservice(@PathVariable String name){
+	
+	RestTemplate restTemplate = new RestTemplate();
+	ResponseEntity<List<Ticket>> response = restTemplate.exchange(
+			ticketGetUrl+name,
+			HttpMethod.GET,
+			null,
+			new ParameterizedTypeReference<List<Ticket>>() {}
+			);
+	
+	List<Ticket> tickets = response.getBody();
+	
+	return tickets;	
 }
 */

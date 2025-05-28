@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 	
 
-	@GetMapping(value="/home")
+	@GetMapping(value="/")
 	public String homePage(Model model, Principal principal) {
 		model.addAttribute("message1", "UserName");
 		model.addAttribute("message2", principal.getName());

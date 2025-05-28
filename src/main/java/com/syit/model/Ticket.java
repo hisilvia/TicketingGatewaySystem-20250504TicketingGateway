@@ -31,12 +31,12 @@ public class Ticket {
 	private String priority;     // LOW, MEDIUM, HIGH
 	private String status;       //OPEN, PENDING_APPROVAL, APPROVED, REJECTED, 
 	
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	//@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private Date creationDate;
 	private String category;
 	private List<String> fileAttachementPath;
 	
-	@OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+	//@OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
 	private List<TicketHistory> history;
 	
 	/*
@@ -149,6 +149,15 @@ public class Ticket {
 		this.history = history;
 	}
 
+	@Override
+	public String toString() {
+		return "Ticket [id=" + id + ", title=" + title + ", description=" + description + ", createdBy=" + createdBy
+				+ ", assignee=" + assignee + ", priority=" + priority + ", status=" + status + ", creationDate="
+				+ creationDate + ", category=" + category + ", fileAttachementPath=" + fileAttachementPath
+				+ ", history=" + history + "]";
+	}
+
+	
 	/*
 	@Override
 	public String toString() {

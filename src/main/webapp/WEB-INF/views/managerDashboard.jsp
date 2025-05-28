@@ -44,9 +44,9 @@
 			 <div class="d-grid gap-2 col-6 mx-auto">
 				<div class="text-center">
 					<h2>Hey ${message2}, welcome to MANAGER page!</h2>
-					
+					<br/><br/>
 					<div>
-						<form action="#" method="GET">
+						<form action="http://localhost:8282/allTicketsView" method="GET">
   			            	<button type="submit" class="btn btn-info">View Tickets</button><br/><br/>
 						</form>
 					
@@ -55,7 +55,7 @@
 						</form>
 					</div>		
 					<br/>
-					<a href="/home">Back To Home</a>
+					<a href="/">Back To Home</a>
 				</div>	
 			 </div>	
 		

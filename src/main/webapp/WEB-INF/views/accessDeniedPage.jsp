@@ -29,7 +29,7 @@
       <div class="col">
 		<h1>Access Denied - You are not authorized to access this resource.</h1>
 		<hr/>
-		<a href="/home">Back to Home Page</a>
+		<a href="/login">Back to Login Page</a>
       </div>
     </div>
   </body>
