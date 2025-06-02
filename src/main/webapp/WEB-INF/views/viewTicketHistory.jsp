@@ -11,11 +11,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <head>
 <meta charset="UTF-8">
-<title>ADMIN page</title>
+		
+<title>View Ticket History</title>
 </head>
 	<body>
 		<nav class="navbar navbar-dark bg-primary justify-content-between">
-			   <a class="navbar-brand" href="/">ADMIN</a>
+			   <a class="navbar-brand" href="/">Home</a>
 			   <ul class="navbar-nav">
 			     <li class="nav-item dropdown">
 			       <a
@@ -35,7 +36,7 @@
 			         </security:authorize>
 			       </a>
 			       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-			         <a class="dropdown-item" href="/admin">Admin</a>
+			         <a class="dropdown-item" href="/user">User</a>
 			         <a class="dropdown-item" href="/login?logout">Logout</a>
 			       </div>
 			     </li>
@@ -43,19 +44,33 @@
 			 </nav>	
 			 <div class="d-grid gap-2 col-6 mx-auto">
 				<div class="text-center">
-					<br/>
-					<h2>Hey ${message2}, welcome to ADMIN page!</h2>
-					
-					<div>
-						<form action="http://localhost:8282/allTicketsView" method="GET">
-  			            	<button type="submit" class="btn btn-info">View Tickets</button><br/><br/>
-						</form>
-					    <!--
-						<form action="#" method="GET">
-  			            	<button type="submit" class="btn btn-info">View Status</button><br/><br/>
-						</form>
-						-->
-					</div>		
+					<br/><br/>
+					<h2>View Ticket History</h2>
+					<table border="1" width="100%" cellpadding="8">
+					    <thead>
+					        <tr>
+					            <th>ID</th>
+					            <th>Action</th>
+					            <th>Action By</th>
+					            <th>Action Date</th>	
+								<th>Comments</th>							
+					        </tr>
+					    </thead>
+						<tbody>
+							<c:forEach var="th" items="${ticketHistoryList}" >
+								<tr>
+									<td>${th.id}</td>					
+									<td>${th.action}</td>
+									<td>${th.actionBy}</td>
+									<td>${th.actionDate}</td>
+									<td>${th.comments}</td>
+									
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+						
 					<br/>
 					<a href="/">Back To Home</a>
 				</div>	

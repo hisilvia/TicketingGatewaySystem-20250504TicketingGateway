@@ -52,9 +52,11 @@
 					            <th>ID</th>
 					            <th>Title</th>
 					            <th>Priority</th>
-					            <th>Status</th>								
+					            <th>Status</th>	
+								<th>CreatedBy</th>							
 					            <th>Assignee</th>
-					            
+								<th>Files</th>
+					            <th>Action</th>
 					        </tr>
 					    </thead>
 						<tbody>
@@ -64,7 +66,31 @@
 									<td>${ticket.title}</td>
 									<td>${ticket.priority}</td>
 									<td>${ticket.status}</td>
+									<td>${ticket.createdBy}</td>
 									<td><c:out value="${ticket.assignee}" default="Not Yet" /></td>
+									<td>									
+										<ul>
+									    <c:forEach var="file" items="${ticket.fileAttachementPath}">
+									        <li><a href="/download/${file}">${file}</a></li>
+									    </c:forEach>
+										</ul>
+									</td>
+									<td>
+										<div class="actionButtons">		
+											<form action="http://localhost:8282/user/update/reopen/${ticket.id}" method="POST">
+												<button type="submit" class="btn btn-info">REOPEN</button><br/>
+											</form>
+											<br/>
+											<form action="http://localhost:8282/user/update/close/${ticket.id}" method="POST">
+												<button type="submit" class="btn btn-info">CLOSE</button><br/>
+											</form>
+											<br/>
+					  			          	<form action="http://localhost:8282/ticketHistory/${ticket.id}" method="GET">
+											<button type="submit" class="btn btn-info">View History</button><br/>
+											</form>
+											<br/>
+										</div>
+									</td>	
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -72,7 +98,7 @@
 				</div>
 						
 					<br/>
-					<a href="/home">Back To Home</a>
+					<a href="/">Back To Home</a>
 				</div>	
 			 </div>	
 		

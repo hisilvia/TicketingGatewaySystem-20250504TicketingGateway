@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syit.model.Ticket;
+import com.syit.model.TicketHistory;
 
 @Component
 public class TicketClient {
@@ -26,6 +27,9 @@ public class TicketClient {
 	private static final String ticketGetUrl = "http://localhost:8383/ticket/ticketGetByName/";
 	private static final String ticketGetAllUrl = "http://localhost:8383/ticket/ticketGetAll";
 	private static final String ticketUpdateStatusUrl = "http://localhost:8383/ticket/updateTicket";
+	
+	private static final String ticketHistoryPostUrl = "http://localhost:8383/ticket/ticketHistoryPost";
+	private static final String ticketHistoryGetUrl = "http://localhost:8383/ticket/ticketHistoryGetById/";
 	
 	public static ResponseEntity<String> ticketPostClient(Ticket t) {
 		
@@ -118,4 +122,41 @@ public class TicketClient {
 		return response;
 	}
 	*/
+	
+	//public static ResponseEntity<String> ticketHistoryPostClient(long id) {
+	public String ticketHistoryPostClient(long id) {	
+		//1.Set headers
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		//2.Create HttpEntity with JsonNode/String and headers
+		HttpEntity<String> request = new HttpEntity<>(String.valueOf(id), headers);
+		
+		//3.Create RestTemplate instance
+		RestTemplate restTemplate = new RestTemplate();
+		
+		//4.Send the POST request
+		ResponseEntity<String> responseEntity = restTemplate.postForEntity(ticketHistoryPostUrl, request, String.class);
+	
+		String response = responseEntity.getBody();
+		return response;
+		
+	}
+	
+	public List<TicketHistory> ticketHitoryGetClient(long id) {
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		ResponseEntity<List<TicketHistory>> response = restTemplate.exchange(
+				ticketHistoryGetUrl+id,
+				HttpMethod.GET,
+				null,
+				new ParameterizedTypeReference<List<TicketHistory>>() {}
+				);
+		
+		List<TicketHistory> tickets = response.getBody();
+		
+		return tickets;
+	}
+	
 }

@@ -49,10 +49,11 @@
 						<form action="http://localhost:8282/allTicketsView" method="GET">
   			            	<button type="submit" class="btn btn-info">View Tickets</button><br/><br/>
 						</form>
-					
+					<!--
 						<form action="#" method="GET">
   			            	<button type="submit" class="btn btn-info">View Status</button><br/><br/>
 						</form>
+						-->
 					</div>		
 					<br/>
 					<a href="/">Back To Home</a>

@@ -98,7 +98,7 @@ public class TicketController {
             ticket.setCategory(category);
             //ticket.setCreationDate(new Date(date));
             ticket.setCreatedBy(authentication.getName());
-            ticket.setStatus("OPEN");
+            ticket.setStatus("CREATE");
             ticket.setAssignee(null);
             
             List<String> attachFileName = new ArrayList<>();

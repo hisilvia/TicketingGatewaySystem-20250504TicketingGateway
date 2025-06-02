@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 
 public class TicketHistory {
 
-	//private long id;
+	private long id;
 	private Ticket ticket;
 	private String action;  //CREATED, APPROVED, REJECTED, ASSIGNED, RESOLVED, CLOSED, REOPENED
 	//private Employee actionBy;
@@ -36,7 +36,7 @@ public class TicketHistory {
 		this.actionDate = actionDate;
 		this.comments = comments;
 	}
-
+	 */
 	public long getId() {
 		return id;
 	}
@@ -44,7 +44,7 @@ public class TicketHistory {
 	public void setId(long id) {
 		this.id = id;
 	}
-     */
+     
 	public Ticket getTicket() {
 		return ticket;
 	}

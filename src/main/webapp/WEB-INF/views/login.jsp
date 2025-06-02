@@ -25,6 +25,32 @@
     <title>Login to Tickecting Gateway System</title>
   </head>
   <body style="height: 100vh" class="w-100">
+	<nav class="navbar navbar-dark bg-primary justify-content-between">
+	   <a class="navbar-brand" href="/">Home</a>
+	   <ul class="navbar-nav">
+	     <li class="nav-item dropdown">
+	       <a
+	         class="nav-link dropdown-toggle"
+	         href="#"
+	         id="navbarDropdownMenuLink"
+	         data-toggle="dropdown"
+	         aria-haspopup="true"
+	         aria-expanded="false"
+	       >
+	         <security:authorize access="isAuthenticated()">
+	           Welcome,<span
+	             id="username"
+	             class="font-weight-bold font-italic ml-1"
+	             ><security:authentication property="principal.username"
+	           /></span>
+	         </security:authorize>
+	       </a>
+	       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+	         <a class="dropdown-item" href="/login?logout">Logout</a>
+	       </div>
+	     </li>
+	   </ul>
+	 </nav>	
     <div class="mt-5 d-flex justify-content-center">
 	  
 	  <br/><br/>	

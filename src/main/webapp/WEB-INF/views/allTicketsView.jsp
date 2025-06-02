@@ -62,9 +62,11 @@
 				            <th>Title</th>
 				            <th>Priority</th>
 				            <th>Status</th>
+							<th>CreatedBy</th>
 				            <th>Assignee</th>
 							<th>Files</th>
 							<th>Actions</th>
+							<th>History</th>
 							
 				        </tr>
 				    </thead>
@@ -75,6 +77,7 @@
 								<td>${ticket.title}</td>
 								<td>${ticket.priority}</td>
 								<td id="status">${ticket.status}</td>
+								<td>${ticket.createdBy}</td>
 								<td id="assignee"><c:out value="${ticket.assignee}" default="Not Yet" /></td>
 								<td>									
 									<ul>
@@ -93,22 +96,27 @@
 												-->
 												
 												<form action="http://localhost:8282/manager/update/approve/${ticket.id}" method="POST">
-													<button type="submit" class="btn btn-info">APPROVAL</button><br/>
+													<button type="submit" class="btn btn-primary">APPROVAL</button><br/>
 												</form>
 												
 												<br/>
 												<form action="http://localhost:8282/manager/update/reject/${ticket.id}" method="POST">
-													<button type="submit" class="btn btn-info">REJECTION</button>
+													<button type="submit" class="btn btn-warning">REJECTION</button>
 												</form>
 						  			          </security:authorize>
 									          <security:authorize access="hasAuthority('ADMIN')">
-												<form action="http://localhost:8282/manager/update/resolve/${ticket.id}" method="POST">
-												<button type="submit" class="btn btn-info">RESOLUTION</button>
+												<form action="http://localhost:8282/admin/update/resolve/${ticket.id}" method="POST">
+												<button type="submit" class="btn btn-success">RESOLUTION</button>
 												</form>
 									          </security:authorize>
 								        </security:authorize>
 										
 									</div>
+								</td>
+								<td>
+									<form action="http://localhost:8282/ticketHistory/${ticket.id}" method="GET">
+										<button type="submit" class="btn btn-info">View History</button>
+									</form>
 								</td>	
 							</tr>
 						</c:forEach>
